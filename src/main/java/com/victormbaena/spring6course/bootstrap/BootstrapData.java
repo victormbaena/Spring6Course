@@ -29,16 +29,8 @@ public class BootstrapData implements CommandLineRunner {
         ddd.setTitle("Domain Driven Design");
         ddd.setIsbn("123123123");
 
-        Publisher almedina = new Publisher();
-        almedina.setPublisherName("Almedina Books");
-        almedina.setAddress("Rua da Sofia");
-        almedina.setCity("Coimbra");
-        almedina.setZip("3000-301");
-        almedina.setState("Portugal");
-
         Author erinSaved = authorRepository.save(erin);
         Book dddSaved = bookRepository.save(ddd);
-        Publisher almedinaSaved = publisherRepository.save(almedina);
 
         Author rod = new Author();
         rod.setFirstName("Rod");
@@ -48,6 +40,24 @@ public class BootstrapData implements CommandLineRunner {
         noEJB.setTitle("J2EE Development without EJB");
         noEJB.setIsbn("456456456");
 
+        Author rodSaved = authorRepository.save(rod);
+        Book noEJBSaved = bookRepository.save(noEJB);
+
+        erinSaved.getBooks().add(dddSaved);
+        rodSaved.getBooks().add(noEJBSaved);
+
+        dddSaved.getAuthors().add(erinSaved);
+        noEJBSaved.getAuthors().add(rodSaved);
+
+        Publisher almedina = new Publisher();
+        almedina.setPublisherName("Almedina Books");
+        almedina.setAddress("Rua da Sofia");
+        almedina.setCity("Coimbra");
+        almedina.setZip("3000-301");
+        almedina.setState("Portugal");
+
+        Publisher almedinaSaved = publisherRepository.save(almedina);
+
         Publisher bertrand = new Publisher();
         bertrand.setPublisherName("Bertrand Books");
         bertrand.setAddress("Rua da Sofia");
@@ -55,40 +65,28 @@ public class BootstrapData implements CommandLineRunner {
         bertrand.setZip("1100-301");
         bertrand.setState("Portugal");
 
-        Author rodSaved = authorRepository.save(rod);
-        Book noEJBSaved = bookRepository.save(noEJB);
         Publisher bertrandSaved = publisherRepository.save(bertrand);
 
-        erinSaved.getBooks().add(dddSaved);
-        rodSaved.getBooks().add(noEJBSaved);
+        dddSaved.setPublisher(bertrandSaved);
+        noEJBSaved.setPublisher(almedinaSaved);
 
         authorRepository.save(erinSaved);
         authorRepository.save(rodSaved);
-        publisherRepository.save(almedinaSaved);
-        publisherRepository.save(bertrandSaved);
+
+        bookRepository.save(dddSaved);
+        bookRepository.save(noEJBSaved);
 
         System.out.println("In Bootstrap");
         System.out.println("Author Count: " + authorRepository.count());
         System.out.println("Book Count: " + bookRepository.count());
         System.out.println("Publisher Count: " + publisherRepository.count());
 
-        System.out.println("Book list -> ");
-        for (Book book : bookRepository.findAll()) {
-            System.out.println("Book -> " + book.toString());
+        for (Author author :
+                authorRepository.findAll()) {
+            System.out.println(author);
+            System.out.println(author.getBooks());
         }
-        System.out.println("End of Book list");
 
-        System.out.println("Author list -> ");
-        for (Author author : authorRepository.findAll()) {
-            System.out.println("Author -> " + author.toString());
-        }
-        System.out.println("End of Author list");
-
-        System.out.println("Publisher list -> ");
-        for (Publisher publisher : publisherRepository.findAll()) {
-            System.out.println("Publisher -> " + publisher.toString());
-        }
-        System.out.println("End of Publisher list");
 
     }
 }

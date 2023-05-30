@@ -20,7 +20,7 @@ import static lombok.EqualsAndHashCode.Include;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@ToString(exclude = "books")
 @Entity
 public class Author {
 
